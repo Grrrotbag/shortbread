@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>URL Shortener Microservice | freeCodeCamp.org</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Bungee+Shade&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Faster+One&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inconsolata&family=Inter:wght@400;800&display=swap"
+      rel="stylesheet"
+    />
+    <link href="/public/style.css" rel="stylesheet" type="text/css" />
+  </head>
+
+  <body>
+    <div id="header">
+      <h1>Shortbread</h1>
+      <h2>URL shortening microservice</h2>
+    </div>
+    <main>
+      <section>
+        <h3>example: <code>POST [project_url]/api/shorturl/new - https://www.google.com</code></h3>
+        <form action="/api/shorturl/new" method="POST">
+          <fieldset>
+            <legend>URL Shortener</legend>
+            <label for="url_input">URL:</label>
+            <input id="url_input" type="text" name="url" placeholder="https://www.google.com/" />
+            <input type="submit" value="POST URL" />
+          </fieldset>
+        </form>
+      </section>
+    </main>
+    <footer>
+      <p>By <a href="https://www.gerardkeane.xyz/">Gerard Keane</a></p>
+    </footer>
+  </body>
+</html>
