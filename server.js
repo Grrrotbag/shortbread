@@ -19,6 +19,7 @@ mongoose.connect(process.env.DB_URI, { useNewUrlParser: true, useUnifiedTopology
 app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
+
 // =============================================================================
 // DATABASE
 // =============================================================================
@@ -30,6 +31,15 @@ const shortUrlSchema = new Schema({
 });
 
 let ShortUrl = mongoose.model("ShortUrl", shortUrlSchema);
+
+// =============================================================================
+// Validate URL
+// =============================================================================
+const isValidUrl = (url) => {
+  const expression = /^((?:https?:\/\/)[^.\/]+(?:\.[^.\/]+)+(?:\/.*)?)$/;
+  return url.match(expression);
+};
+
 // =============================================================================
 // SERVER
 // =============================================================================
@@ -43,31 +53,40 @@ app.get("/", function (req, res) {
 
 app.post("/api/shorturl/new", (req, res) => {
   let requestedUrl = req.body.url;
-  let urlObject = new URL(requestedUrl);
 
-  dns.lookup(urlObject.hostname, (err, address, family) => {
-    if (err) {
-      res.json({
-        error: "invalid URL",
-      });
-    } else {
-      let hash = sha1(urlObject.toString()).slice(0, 7);
+  console.log(requestedUrl);
 
-      let data = new ShortUrl({
-        original_url: requestedUrl,
-        short_url: hash,
-      });
+  if (isValidUrl(requestedUrl)) {
+    let urlObject = new URL(requestedUrl);
+    console.log(urlObject);
+    dns.lookup(urlObject.hostname, (err, address, family) => {
+      if (err) {
+        res.json({
+          error: "invalid URL",
+        });
+      } else {
+        let hash = sha1(urlObject.toString()).slice(0, 7);
 
-      data.save((err, data) => {
-        if (err) return console.error(err);
-      });
+        let data = new ShortUrl({
+          original_url: requestedUrl,
+          short_url: hash,
+        });
 
-      res.json({
-        original_url: requestedUrl,
-        short_url: hash,
-      });
-    }
-  });
+        data.save((err, data) => {
+          if (err) return console.error(err);
+        });
+
+        res.json({
+          original_url: requestedUrl,
+          short_url: hash,
+        });
+      }
+    });
+  } else {
+    res.json({
+      error: "Invalid URL",
+    });
+  }
 });
 
 app.get("/api/shorturl/:num", (req, res) => {
