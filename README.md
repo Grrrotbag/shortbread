@@ -1,5 +1,7 @@
 # Shortbread
 
+![preview image](preview.png)
+
 Shortbread is a url shortening microservice. You can enter a url and submit, and a json object containing the original url and a shortened url will be returned.
 
 If the shortened url is included at the end of `/api/shorturl/`, shortbread will look up the shortened url in a database and forward you to the original url associated with the shortened url.
